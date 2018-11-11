@@ -14,11 +14,11 @@ public class Polynom implements Polynom_able {
 
 	private List<Monom> poly;
 
-	/**
-	 * Auxiliary function for reducing Polynom.
-	 * It will go over the Monoms in the polynom and erase those with coefficient 0.
-	 * used after derivative action, addition and substraction.
-	 */
+
+//	  Auxiliary function for reducing Polynom.
+//	  It will go over the Monoms in the polynom and erase those with coefficient 0.
+//	  used after derivative action, addition and substraction.
+
 	private void reduce(){
 		Iterator<Monom> it = iterator();
 		Monom current;
@@ -30,12 +30,12 @@ public class Polynom implements Polynom_able {
 		}
 	}
 
-	/**
-	 * This takes a string and returns the same string excluding spaces.
-	 * Its mostly for help string constructor handle the input right.
-	 * @param s the original input string.
-	 * @return the input string with no spaces.
-	 */
+
+//	  This takes a string and returns the same string excluding spaces.
+//	  Its mostly for help string constructor handle the input right.
+//	  @param s the original input string.
+//	  @return the input string with no spaces.
+
 	private static String reduceSpaces(String s) {
 		StringTokenizer stk = new StringTokenizer(s);
 		String spaceless = "";
@@ -115,9 +115,9 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * This for adding Monom to this Polynom.
-	 * It will add the given Monom at the right place inside the Polynom.
-	 * Also, it will reduce the polynom needed after addition.
+	 * This method adds a Monom to this Polynom.
+	 * It will add the given Monom at the correct place inside the Polynom.
+	 * Also, it will reduce the polynom if any of it's monoms have a _coefficient that's zero.
 	 * @param m given monom to add
 	 */
 	public void add(Monom m) {
@@ -148,7 +148,7 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * This for substructing given Polinom_able from this Polynom.
+	 * This method substracts a given Polinom_able from this Polynom.
 	 * @param p1 given Polynom_able
 	 */
 	@Override
@@ -162,7 +162,7 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * This for multiplying this Polynom with given Polinom_able.
+	 * This method multiplies this Polynom with a given Polinom_able.
 	 * @param p1 given Polynom_able.
 	 */
 	@Override
@@ -183,13 +183,19 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * This for comparing this Polynom with given Polynom_able.
+	 * This method compares this Polynom with a given Polynom_able.
 	 * @param p1 given polynom_able.
-	 * @return true if Polynom are equal.
+	 * @return true if the Polynoms are equal.
 	 */
 	@Override
-	public boolean equals(Polynom_able p1) {
-		Iterator<Monom> it1 = p1.iterator();
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Polynom)) {
+			return false;
+		}
+		Polynom p = new Polynom ();
+		p = (Polynom)obj;
+		
+		Iterator<Monom> it1 = p.iterator();
 		Iterator<Monom> it2 = this.iterator();
 		while( it1.hasNext() && it2.hasNext()){
 			if(!it2.next().equals(it1.next()))
@@ -197,6 +203,11 @@ public class Polynom implements Polynom_able {
 		}
 		return !it1.hasNext() && !it2.hasNext();
 	}
+	
+	//public boolean equals (Polynom_able p1) {
+		
+	
+	//}
 
 	/**
 	 *
@@ -208,13 +219,13 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * Compute a value x' (x0<=x'<=x1) for with |f(x')| < eps
-	 * assuming (f(x0)*f(x1)<=0, returns f(x2) such that:
-	 *	(i) x0<=x2<=x2 && (ii) f(x2)<eps
+	 * This method finds a value x' (x0<=x'<=x1) that is less than eps away from an x that gives F(x)=0.
+	 * In every interaction we find the middle between x0 and x1 and continue searching in the currect half
+	 * until the differance between x0 and x1 is less than eps
 	 * @param x0 starting point
 	 * @param x1 end point
 	 * @param eps step (positive) value
-	 * @return
+	 * @return x' that is less than eps away from an x that gives F(x)=0.
 	 */
 	@Override
 	public double root(double x0, double x1, double eps) {
@@ -224,7 +235,8 @@ public class Polynom implements Polynom_able {
 		if(this.f(x1)==0) {
 			return x1;
 		}
-		if(x0>x1
+		if((x0>x1)
+				|| (eps<=0)
 				||(this.f(x0)>0 && this.f(x1)>0)
 				||(this.f(x0)<0 && this.f(x1)<0) ) {
 			throw new java.lang.RuntimeException("error: cannot find root");
@@ -254,8 +266,8 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * Compute a new Polynom which is the derivative of this Polynom
-	 * @return this Polynom derivative.
+	 * This method creates a new Polynom which is the derivative of this Polynom
+	 * @return the Polynom derivative.
 	 */
 	@Override
 	public Polynom_able derivative() {
@@ -269,7 +281,7 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * Compute a Riman's integral from x0 to x1 in eps steps.
+	 * This method calculates the area above X-axis using a Riman's integral between x0 and x1 in eps steps.
 	 * @param x0 starting point
 	 * @param x1 end point
 	 * @param eps positive step value
@@ -277,6 +289,8 @@ public class Polynom implements Polynom_able {
 	 */
 	@Override
 	public double area(double x0, double x1, double eps) {
+		if(eps<=0)
+			throw new java.lang.RuntimeException("error: cannot find area");
 		if (x0>x1)
 			return 0;
 
@@ -292,7 +306,7 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * add given Polynom to this Polynom.
+	 * add a given Polynom to this Polynom.
 	 * @param ot given Polynom
 	 */
 	public void add(Polynom_able ot){
@@ -303,7 +317,7 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * This implement value at x. (f(x))
+	 * This method returns the function value for a given x. (f(x))
 	 * @param x
 	 * @return Polynom value at x.
 	 */
@@ -318,7 +332,7 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * This for representing Polynom by string in the native writing form.
+	 * This method is for representing a Polynom by a string.
 	 * for example: 3*x^2-2*x^1+1*x^0 = "3x^2-2x+1"
 	 * @return string representation of this Polynom.
 	 */

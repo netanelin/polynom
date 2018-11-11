@@ -30,7 +30,7 @@ import java.util.Iterator;
  * @author ben-moshe
  *
  */
-public interface Polynom_able extends cont_function {
+public interface Polynom_able extends cont_function{
 	/**
 	 * Add p1 to this Polynom
 	 * @param p1
@@ -52,11 +52,11 @@ public interface Polynom_able extends cont_function {
 	 */
 	public void multiply(Polynom_able p1);
 	/**
-	 * Test if this Polynom is logically equals to p1.
-	 * @param p1
-	 * @return true iff this pulynom represents the same function ans p1
+	 * Test if this Polynom equals obj.
+	 * @param obj
+	 * @return true if this polynom represents the same function as obj
 	 */
-	public boolean equals (Polynom_able p1);
+	public boolean equals (Object obj);
 	/**
 	 * Test if this is the Zero Polynom
 	 * @return
@@ -87,7 +87,7 @@ public interface Polynom_able extends cont_function {
 	 * see: https://en.wikipedia.org/wiki/Riemann_integral
 	 * @return the approximated area above the x-axis below this Polynom and between the [x0,x1] range.
 	 */
-	public double area(double x0, double x1, double eps);
+	public double area(double x0,double x1, double eps);
 	/**
 	 * @return an Iterator (of Monoms) over this Polynom
 	 * @return
