@@ -207,6 +207,8 @@ class PolynomTest {
 		Polynom_able der = p.derivative();
 
 		assertEquals(der,target);
+		assertTrue(!p.equals(target));
+
 	}
 
 	@Test

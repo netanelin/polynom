@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.List;
 
 /**
  * This class represents a Polynom with add, multiply functionality, it also should support the following:
@@ -64,7 +65,8 @@ public class Polynom implements Polynom_able {
 		poly = new ArrayList<Monom>();
 		Iterator<Monom> it = ot.iterator();
 		while (it.hasNext()) {
-			poly.add(it.next());
+			Monom copy = new Monom(it.next());
+			poly.add(copy);
 		}
 	}
 
@@ -143,7 +145,6 @@ public class Polynom implements Polynom_able {
 				poly.add(m);
 
 			reduce();
-
 		}
 	}
 
@@ -184,7 +185,7 @@ public class Polynom implements Polynom_able {
 
 	/**
 	 * This method compares this Polynom with a given Polynom_able.
-	 * @param p1 given polynom_able.
+	 * @param obj given Object.
 	 * @return true if the Polynoms are equal.
 	 */
 	@Override
@@ -192,8 +193,7 @@ public class Polynom implements Polynom_able {
 		if(!(obj instanceof Polynom)) {
 			return false;
 		}
-		Polynom p = new Polynom ();
-		p = (Polynom)obj;
+		Polynom p = (Polynom)obj;
 		
 		Iterator<Monom> it1 = p.iterator();
 		Iterator<Monom> it2 = this.iterator();
@@ -203,11 +203,6 @@ public class Polynom implements Polynom_able {
 		}
 		return !it1.hasNext() && !it2.hasNext();
 	}
-	
-	//public boolean equals (Polynom_able p1) {
-		
-	
-	//}
 
 	/**
 	 *
@@ -252,7 +247,6 @@ public class Polynom implements Polynom_able {
 		else {
 			return root(mid,x1,eps);
 		}
-
 	}
 
 	/**
@@ -328,7 +322,6 @@ public class Polynom implements Polynom_able {
 			sum += it.next().f(x);
 		}
 		return sum;
-
 	}
 
 	/**
@@ -354,7 +347,6 @@ public class Polynom implements Polynom_able {
 				}
 			}
 		}
-
 		return polyString;
 	}
 
