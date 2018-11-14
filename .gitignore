@@ -2,3 +2,6 @@
 *.iml
 *.class
 *.xml
+/bin/
+.classpath
+.project

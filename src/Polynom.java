@@ -1,7 +1,7 @@
 import java.util.*;
-
+import java.util.List;
 /**
- * This class represents a Polynom with add, multiply functionality, it also should support the following:
+ * This class represents a Polynom with add, multiply functionality, it also supports the following:
  * 1. Riemann's Integral: https://en.wikipedia.org/wiki/Riemann_integral
  * 2. Finding a numerical value between two values (currently support root only f(x)=0).
  * 3. Derivative
@@ -64,7 +64,8 @@ public class Polynom implements Polynom_able {
 		poly = new ArrayList<Monom>();
 		Iterator<Monom> it = ot.iterator();
 		while (it.hasNext()) {
-			poly.add(it.next());
+			Monom copy = new Monom(it.next());
+			poly.add(copy);
 		}
 	}
 
@@ -183,8 +184,8 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * This method compares this Polynom with a given Polynom_able.
-	 * @param p1 given polynom_able.
+	 * This method compares this Polynom with a given Object.
+	 * @param obj given Object.
 	 * @return true if the Polynoms are equal.
 	 */
 	@Override
@@ -192,8 +193,7 @@ public class Polynom implements Polynom_able {
 		if(!(obj instanceof Polynom)) {
 			return false;
 		}
-		Polynom p = new Polynom ();
-		p = (Polynom)obj;
+		Polynom p = (Polynom)obj;
 		
 		Iterator<Monom> it1 = p.iterator();
 		Iterator<Monom> it2 = this.iterator();
@@ -203,14 +203,8 @@ public class Polynom implements Polynom_able {
 		}
 		return !it1.hasNext() && !it2.hasNext();
 	}
-	
-	//public boolean equals (Polynom_able p1) {
-		
-	
-	//}
 
 	/**
-	 *
 	 * @return true if this polynom is the zero polynomial.
 	 */
 	@Override
@@ -220,8 +214,8 @@ public class Polynom implements Polynom_able {
 
 	/**
 	 * This method finds a value x' (x0<=x'<=x1) that is less than eps away from an x that gives F(x)=0.
-	 * In every interaction we find the middle between x0 and x1 and continue searching in the currect half
-	 * until the differance between x0 and x1 is less than eps
+	 * In every interaction we find the middle between x0 and x1 and continue searching in the correct half
+	 * until the difference between x0 and x1 is less than eps
 	 * @param x0 starting point
 	 * @param x1 end point
 	 * @param eps step (positive) value
@@ -281,7 +275,8 @@ public class Polynom implements Polynom_able {
 	}
 
 	/**
-	 * This method calculates the area above X-axis using a Riman's integral between x0 and x1 in eps steps.
+	 * This method calculates the area above X-axis
+	 * using a Riman's integral between x0 and x1 in eps steps.
 	 * @param x0 starting point
 	 * @param x1 end point
 	 * @param eps positive step value
@@ -299,6 +294,33 @@ public class Polynom implements Polynom_able {
 		while(currentX<x1){
 			if (f(currentX)>0) {
 				sum += eps*f(currentX);
+			}
+			currentX += eps;
+		}
+		return sum;
+	}
+	
+	
+	/**
+	 * This method calculates the area over the polynom and beneath X-axis
+	 * using a Riman's integral between x0 and x1 in eps steps.
+	 * @param x0 starting point
+	 * @param x1 end point
+	 * @param eps positive step value
+	 * @return the approximated area above X-axis below this function bounded in the range of [x0,x1]
+	 */
+	
+	public double areaBeneathXaxis(double x0, double x1, double eps) {
+		if(eps<=0)
+			throw new java.lang.RuntimeException("error: cannot find area");
+		if (x0>x1)
+			return 0;
+
+		double currentX = x0;
+		double sum = 0;
+		while(currentX<x1){
+			if (f(currentX)<0) {
+				sum += eps*(-f(currentX));
 			}
 			currentX += eps;
 		}

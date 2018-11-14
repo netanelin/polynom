@@ -154,18 +154,11 @@ class PolynomTest {
 		double cut3 = p1.root(0 , 1.5 , eps);
 		double cut4 = p1.root(-0.5 , 1 , eps);
 
+		//bad cases:
 
+		// both x0 && x1 are above x axis or below it
 		try {
-			// both x0 && x1 are above x axis or below it
 			double cut5 = p1.root(-1.5, 0.5, eps);
-			double cut6 = p1.root(-0.75, -0.25, eps);
-
-			//no cut
-			double cut7 = p1.root(1.5 , 2 , eps);
-			double cut8 = p1.root(-2, -1.5 , eps);
-
-			//x1<x0
-			double cut9 = p1.root(1.5, 0.5 , eps);
 		}
 		catch (RuntimeException e){
 			exceptionThrown = true;
@@ -173,6 +166,45 @@ class PolynomTest {
 
 		assertTrue(exceptionThrown,"error: func root");
 
+		//no cut
+		exceptionThrown = false;
+		try {
+			double cut7 = p1.root(1.5 , 2 , eps);
+		}
+		catch (Exception e) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown,"error: func root");
+
+		exceptionThrown = false;
+		try {
+			double cut8 = p1.root(-2, -1.5 , eps);
+		}
+		catch (Exception e) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown,"error: func root");
+
+		//x1<x0
+		exceptionThrown = false;
+		try {
+			double cut9 = p1.root(1.5, 0.5 , eps);
+		}
+		catch (Exception e) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown,"error: func root");
+
+		exceptionThrown = false;
+		try {
+			double cut6 = p1.root(-0.75, -0.25, eps);
+		}
+		catch (Exception e) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown,"error: func root");
+
+		//eps=0
 		exceptionThrown = false;
 		try {
 			double cut10 = p0.root(2, 4, 0);
@@ -182,6 +214,7 @@ class PolynomTest {
 		}
 		assertTrue(exceptionThrown,"error: func root");
 
+		//eps<0
 		exceptionThrown = false;
 		try {
 			double cut11 = p0.root(2, 4, -0.01);
@@ -207,6 +240,7 @@ class PolynomTest {
 		Polynom_able der = p.derivative();
 
 		assertEquals(der,target);
+		assertTrue(!p.equals(target));
 	}
 
 	@Test
@@ -251,8 +285,9 @@ class PolynomTest {
 		assertTrue(Math.abs(target1-result1)>=Math.abs(target1-result2),"error: func area");
 		assertTrue(Math.abs(target1-result2)>=Math.abs(target1-result3),"error: func area");
 
+		//bad cases:
 
-
+		//eps = 0
 		boolean exceptionThrown = false;
 		try {
 			double result4 = p0.area(2, 4, 0);
@@ -262,6 +297,7 @@ class PolynomTest {
 		}
 		assertTrue(exceptionThrown,"error: func area");
 
+		//eps < 0
 		exceptionThrown = false;
 		try {
 			double result4 = p0.area(2, 4, -0.01);
@@ -277,6 +313,52 @@ class PolynomTest {
 		final double eps = 0.01;
 		double result6 = p1.area(-1 ,1 , eps);
 		double result7 = p1.area(-1 ,0 , eps);
-		assertEquals(result6, result7);
+		double diff = Math.abs(result6-result7);
+		assertTrue(diff<eps,"error: func area");
+	}
+
+	@Test
+	void areaBeneathXaxisTest() {
+		//check if smaller epsilon gives more precise answer
+		Polynom p0 = new Polynom("-x^2 + 9");
+		double result1 = p0.areaBeneathXaxis(-3 ,3 , 0.5);
+		double result2 = p0.areaBeneathXaxis(-3 ,3 , 0.25);
+		double result3 = p0.areaBeneathXaxis(-3 ,3 , 0.01);
+
+		final int target1 = 36;
+
+		assertTrue(Math.abs(target1-result1)>=Math.abs(target1-result2),"error: func areaBeneathXaxis");
+		assertTrue(Math.abs(target1-result2)>=Math.abs(target1-result3),"error: func areaBeneathXaxis");
+
+		//bad cases:
+
+		//eps = 0
+		boolean exceptionThrown = false;
+		try {
+			double result4 = p0.areaBeneathXaxis(2, 4, 0);
+		}
+		catch (Exception e) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown,"error: func areaBeneathXaxis");
+
+		//eps < 0
+		exceptionThrown = false;
+		try {
+			double result4 = p0.areaBeneathXaxis(2, 4, -0.01);
+		}
+		catch (Exception e) {
+			exceptionThrown = true;
+		}
+		assertTrue(exceptionThrown,"error: func areaBeneathXaxis");
+
+
+		//check if areaBeneathXaxis calculates only areas beneath x axis
+		Polynom p1 = new Polynom("x^3 - x");	//positive at: -1<x<0 && x>1. negative at: 0<x<1 && x<-1
+		final double eps = 0.01;
+		double result6 = p1.areaBeneathXaxis(-1 ,1 , eps);
+		double result7 = p1.areaBeneathXaxis(0 ,1 , eps);
+		double diff = Math.abs(result6-result7);
+		assertTrue(diff<eps,"error: func areaBeneathXaxis");
 	}
 }
