@@ -298,6 +298,8 @@ public class Polynom implements Polynom_able {
 		}
 		return sum;
 	}
+	
+	
 
 	/**
 	 * add a given Polynom to this Polynom.
