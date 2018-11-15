@@ -1,11 +1,5 @@
-
 *.iml
 *.class
 *.xml
-<<<<<<< HEAD
-referenced libraries/gral-core-0.11.jar
-=======
-/bin/
 .classpath
 .project
->>>>>>> 6b86a499d0af114321b8cf3fdd5fe084252a91c1
