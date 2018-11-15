@@ -1,9 +1,6 @@
 import java.util.*;
 import java.util.List;
-<<<<<<< HEAD
 
-=======
->>>>>>> 6b86a499d0af114321b8cf3fdd5fe084252a91c1
 /**
  * This class represents a Polynom with add, multiply functionality, it also supports the following:
  * 1. Riemann's Integral: https://en.wikipedia.org/wiki/Riemann_integral
@@ -33,7 +30,6 @@ public class Polynom implements Polynom_able {
 			}
 		}
 	}
-
 
 //	  This takes a string and returns the same string excluding spaces.
 //	  Its mostly for help string constructor handle the input right.
@@ -80,34 +76,39 @@ public class Polynom implements Polynom_able {
 	 * @throws RuntimeException if input is invalid.
 	 */
 	public Polynom(String s) throws RuntimeException {
-		Polynom tempP = new Polynom();
 		s = reduceSpaces(s);
-		if (s.contains("--") || s.contains("-+") || s.contains("+-") || s.contains("++") )
-			throw new RuntimeException("error: invalid input");
-		StringTokenizer stk1 = new StringTokenizer(s, "+");
-		String temp = "";
-		boolean minus;
-		while (stk1.hasMoreTokens()) {
-			temp = stk1.nextToken();
-			minus = false;
-			if (temp.charAt(0) == '-') {
-				minus = true;
-			}
-			StringTokenizer stk2 = new StringTokenizer(temp, "-");
-			if (!minus) {
-				Monom m = new Monom(stk2.nextToken());
-				tempP.add(m);
-			}
-			while (stk2.hasMoreTokens()) {
-				Monom m = new Monom("-" + stk2.nextToken());
-				tempP.add(m);
-			}
-
+		if(s.equals("0")){
+			poly = new ArrayList<Monom>();
 		}
-		poly = new ArrayList<Monom>();
-		Iterator<Monom> it = tempP.iterator();
-		while (it.hasNext()) {
-			poly.add(it.next());
+		else {
+			Polynom tempP = new Polynom();
+			if (s.contains("--") || s.contains("-+") || s.contains("+-") || s.contains("++"))
+				throw new RuntimeException("error: invalid input");
+			StringTokenizer stk1 = new StringTokenizer(s, "+");
+			String temp = "";
+			boolean minus;
+			while (stk1.hasMoreTokens()) {
+				temp = stk1.nextToken();
+				minus = false;
+				if (temp.charAt(0) == '-') {
+					minus = true;
+				}
+				StringTokenizer stk2 = new StringTokenizer(temp, "-");
+				if (!minus) {
+					Monom m = new Monom(stk2.nextToken());
+					tempP.add(m);
+				}
+				while (stk2.hasMoreTokens()) {
+					Monom m = new Monom("-" + stk2.nextToken());
+					tempP.add(m);
+				}
+
+			}
+			poly = new ArrayList<Monom>();
+			Iterator<Monom> it = tempP.iterator();
+			while (it.hasNext()) {
+				poly.add(it.next());
+			}
 		}
 	}
 
@@ -197,14 +198,15 @@ public class Polynom implements Polynom_able {
 	 */
 	@Override
 	public boolean equals(Object obj) {
+
 		if(!(obj instanceof Polynom)) {
 			return false;
 		}
-		Polynom p = (Polynom)obj;
-		
+		Polynom p = new Polynom((Polynom)obj);
+
 		Iterator<Monom> it1 = p.iterator();
 		Iterator<Monom> it2 = this.iterator();
-		while( it1.hasNext() && it2.hasNext()){
+		while (it1.hasNext() && it2.hasNext()){
 			if(!it2.next().equals(it1.next()))
 				return false;
 		}

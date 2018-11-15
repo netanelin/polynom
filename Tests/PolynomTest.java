@@ -115,9 +115,16 @@ class PolynomTest {
 		Polynom p0 = new Polynom("3x^2 + x");
 		Polynom p1 = new Polynom("3x^2 + x");
 		Polynom p2 = new Polynom("3x^3 + 1");
+		Polynom p3 = new Polynom();
+		Polynom p4 = new Polynom("0");
+		Polynom p5 = new Polynom("2");
+
+
 
 		assertTrue(p0.equals(p1),"error: func equals");
 		assertTrue(!p0.equals(p2),"error: func equals");
+		assertTrue(p3.equals(p4),"error: func equals");
+		assertTrue(!p3.equals(p5),"error: func equals");
 	}
 
 	@Test
